@@ -1208,30 +1208,67 @@
     }
 
     /* ==========================================================================
-       SCROLL REVEAL & STAGGER ENTRANCE ANIMATIONS (STUDIO TIER)
+       CINEMATIC SCROLL REVEAL & STAGGER ENTRANCE ANIMATIONS (MAX PRO TIER)
        ========================================================================== */
+    /* Scroll Progress Bar at the Very Top */
+    .scroll-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--cyan) 50%, var(--amber) 100%);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      z-index: 99999;
+      box-shadow: 0 0 14px var(--accent);
+      pointer-events: none;
+      transition: transform 0.08s linear;
+    }
+
+    /* Cinematic Blur + Scale + Fade-Up (Signature Modern Framer/Aceternity effect) */
     .reveal-item {
       opacity: 0;
-      transform: translateY(34px) scale(0.985);
+      transform: translateY(44px) scale(0.965);
+      filter: blur(10px);
       transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.85s cubic-bezier(0.16, 1, 0.3, 1),
                   border-color 0.3s ease,
                   box-shadow 0.3s ease;
-      will-change: opacity, transform;
+      will-change: opacity, transform, filter;
     }
     .reveal-item.revealed {
       opacity: 1;
       transform: translateY(0) scale(1);
+      filter: blur(0px);
     }
+
+    /* Staggered Delay Tokens for Cascading Arrival */
     .delay-1 { transition-delay: 0.08s; }
-    .delay-2 { transition-delay: 0.18s; }
-    .delay-3 { transition-delay: 0.28s; }
-    .delay-4 { transition-delay: 0.38s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+    .delay-4 { transition-delay: 0.32s; }
+    .delay-5 { transition-delay: 0.40s; }
+
+    /* Inner Child Cascade Effect */
+    .reveal-child {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .revealed .reveal-child {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .reveal-item {
+      .reveal-item, .reveal-child {
         opacity: 1 !important;
         transform: none !important;
+        filter: none !important;
         transition: none !important;
       }
     }
@@ -1254,6 +1291,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Top Living Scroll Progress Bar -->
+  <div class="scroll-progress-bar" id="scroll-progress" aria-hidden="true"></div>
 
   <!-- Custom Cursor -->
   <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
@@ -1405,7 +1445,7 @@
 
             <!-- TAB 1: BROWSER PREVIEW -->
             <div class="tab-content active" id="tab-preview">
-              <div class="browser-box">
+              <div class="browser-box reveal-child delay-2">
                 <div class="browser-top">
                   <div class="browser-dots"><span></span><span></span><span></span></div>
                   <div class="browser-url">https://www.jayalaksanalogistik.com</div>
@@ -1423,25 +1463,25 @@
 
             <!-- TAB 2: LIGHTHOUSE DASHBOARD -->
             <div class="tab-content" id="tab-lighthouse">
-              <div class="browser-box">
+              <div class="browser-box reveal-child delay-2">
                 <div style="font-size: 0.85rem; font-weight: 700; color: #34d399; margin-bottom: 8px;">
                   ✓ Hasil Audit Google Lighthouse Resmi (Mode Mobile)
                 </div>
-                <div class="lighthouse-row">
+                <div class="lighthouse-row reveal-child delay-3">
                   <div class="gauge-item">
-                    <div class="gauge-ring">98</div>
+                    <div class="gauge-ring counter-ring" data-target="98">98</div>
                     <span class="gauge-label">Performance</span>
                   </div>
                   <div class="gauge-item">
-                    <div class="gauge-ring">100</div>
+                    <div class="gauge-ring counter-ring" data-target="100">100</div>
                     <span class="gauge-label">Accessibility</span>
                   </div>
                   <div class="gauge-item">
-                    <div class="gauge-ring">100</div>
+                    <div class="gauge-ring counter-ring" data-target="100">100</div>
                     <span class="gauge-label">Best Practices</span>
                   </div>
                   <div class="gauge-item">
-                    <div class="gauge-ring">100</div>
+                    <div class="gauge-ring counter-ring" data-target="100">100</div>
                     <span class="gauge-label">SEO</span>
                   </div>
                 </div>
@@ -1450,7 +1490,7 @@
 
             <!-- TAB 3: ARCHITECTURE & GTM -->
             <div class="tab-content" id="tab-arch">
-              <div class="browser-box">
+              <div class="browser-box reveal-child delay-2">
                 <div style="font-size: 0.84rem; color: #cbd5e1; line-height: 1.6;">
                   <strong style="color:var(--accent-light);">Pelacakan Konversi &amp; Analitik:</strong>
                   <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
@@ -1478,7 +1518,7 @@
               Standarisasi alur dapur komersial, kontrol mutu higienitas rasa, dan manajemen transaksi kasir ritel harian.
             </p>
 
-            <div class="ops-stepper">
+            <div class="ops-stepper reveal-child delay-2">
               <div class="ops-step active" data-step="prep">
                 <div>
                   <strong>01. Mise en Place &amp; Prep Resep</strong>
@@ -1502,7 +1542,7 @@
               </div>
             </div>
 
-            <div class="ops-console" id="ops-display">
+            <div class="ops-console reveal-child delay-3" id="ops-display">
               Fokus pada konsistensi takaran dan kesiapan bahan agar kecepatan penyajian tetap tinggi saat jam ramai pelanggan (peak hours).
             </div>
 
@@ -1523,7 +1563,7 @@
               Uji kapabilitas teknis Maulana langsung dari antarmuka terminal interaktif ini.
             </p>
 
-            <div class="terminal-window">
+            <div class="terminal-window reveal-child delay-2">
               <div class="terminal-bar">
                 <span>bash — guest@maulana-sys:~</span>
                 <span>UTF-8</span>
@@ -1555,7 +1595,7 @@
               Arsitektur alur webhook n8n yang menghubungkan pesan Telegram dengan model Gemini API untuk otomasi respon bisnis cerdas.
             </p>
 
-            <div class="pipe-container">
+            <div class="pipe-container reveal-child delay-2">
               <div class="pipe-node">
                 <div class="pipe-icon">✈</div>
                 <span style="font:0.72rem var(--font-mono); color:var(--text-subtle);">Telegram</span>
@@ -1595,7 +1635,7 @@
               Di dapur komersial saat jam sibuk (peak hours), Anda tidak punya ruang untuk alibi. Kualitas rasa harus tepat, kebersihan harus steril, dan pesanan harus keluar tepat waktu. Kedisiplinan mental inilah yang saya bawa saat menulis kode: terstruktur, tanpa celah, dan siap produksi.
             </p>
 
-            <div class="compare-grid">
+            <div class="compare-grid reveal-child delay-2">
               <div class="compare-col">
                 <span class="compare-title" style="color:var(--rose);">STANDAR PENGEMBANG UMUM (BOOTCAMP / TEORITIS)</span>
                 <ul class="compare-list">
@@ -1696,7 +1736,7 @@
     <section id="kontak">
       <div class="container">
         <div class="contact-wrapper reveal-item">
-          <div class="contact-left">
+          <div class="contact-left reveal-item delay-1">
             <span class="eyebrow">// MARI BERKOLABORASI</span>
             <h2 style="font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em;">Mari Bangun Solusi Bersama.</h2>
             <p style="margin: 14px 0 0; max-width: 440px; color: var(--text-muted);" data-id="Terbuka untuk posisi Frontend Developer, Implementation Specialist, maupun Management F&amp;B di Semarang, Jabodetabek, atau Remote." data-en="Open for Frontend Developer, Implementation Specialist, or F&amp;B Operations roles in Semarang, Jabodetabek, or Remote.">
@@ -1706,7 +1746,7 @@
               <span>●</span> <span id="clock-live">WIB (GMT+7) · Semarang, Indonesia</span>
             </div>
           </div>
-          <div class="contact-list">
+          <div class="contact-list reveal-item delay-2">
             <!-- WhatsApp dengan Chat Template -->
             <a href="https://wa.me/6283176647982?text=Halo%20Maulana%2C%20saya%20tertarik%20dengan%20portofolio%20Anda%20dan%20ingin%20berdiskusi%20mengenai%20peluang%20kerja%20%2F%20proyek." target="_blank" rel="noopener" class="contact-card" title="Buka WhatsApp dengan Template Pesan">
               <div class="contact-card-main">
@@ -2196,19 +2236,62 @@
           showToast('Tema: ' + names[themeIndex]);
         });
       }
-      // 15. SCROLL REVEAL & STAGGER ENTRANCE OBSERVER
+      // 15. DYNAMIC SCROLL PROGRESS BAR (TOP GLOW)
+      const progressBar = document.getElementById('scroll-progress');
+      if (progressBar) {
+        window.addEventListener('scroll', () => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) : 0;
+          progressBar.style.transform = `scaleX(${progress})`;
+        }, { passive: true });
+      }
+
+      // 16. ANIMATED NUMBER COUNTER (ON SCROLL REVEAL)
+      function animateCounter(el) {
+        const target = parseInt(el.dataset.target, 10);
+        if (isNaN(target)) return;
+        const duration = 1200;
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out expo curve
+          const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          const current = Math.floor(easeOut * target);
+          el.textContent = current;
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          } else {
+            el.textContent = target;
+          }
+        }
+        requestAnimationFrame(update);
+      }
+
+      // 17. CINEMATIC SCROLL REVEAL & STAGGER ENTRANCE OBSERVER
       const revealElements = document.querySelectorAll('.reveal-item');
+      let countersAnimated = false;
+
       if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('revealed');
+              
+              // Trigger number counters when the Lighthouse section enters view
+              if (!countersAnimated && entry.target.querySelector('.counter-ring')) {
+                countersAnimated = true;
+                setTimeout(() => {
+                  entry.target.querySelectorAll('.counter-ring').forEach(ring => animateCounter(ring));
+                }, 300);
+              }
+              
               observer.unobserve(entry.target);
             }
           });
         }, {
-          threshold: 0.08,
-          rootMargin: '0px 0px -40px 0px'
+          threshold: 0.12,
+          rootMargin: '0px 0px -50px 0px'
         });
 
         revealElements.forEach(el => revealObserver.observe(el));
@@ -2216,10 +2299,10 @@
         revealElements.forEach(el => el.classList.add('revealed'));
       }
 
-      // Smooth trigger for Hero elements immediately
+      // Smooth trigger for Hero elements immediately on load
       setTimeout(() => {
         document.querySelectorAll('.hero .reveal-item').forEach(el => el.classList.add('revealed'));
-      }, 60);
+      }, 70);
 
     })();
   </script>
